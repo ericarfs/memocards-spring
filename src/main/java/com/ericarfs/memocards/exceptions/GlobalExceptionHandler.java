@@ -23,6 +23,15 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(err, status);
 	}
 	
+	@ExceptionHandler(DatabaseException.class)
+	public ResponseEntity<StandardError> handleDatabaseException(DatabaseException e, HttpServletRequest request){
+		String error = "Database error";
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+		
+		return new ResponseEntity<>(err, status);
+	}
+	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Object> handleGenericException(Exception ex){
 		Map <String, Object> body = new LinkedHashMap<>();
