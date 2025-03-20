@@ -6,7 +6,10 @@ import java.util.Objects;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.lang.NonNull;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 @Document(collection="tb_flashcards")
 public class Flashcard implements Serializable{
@@ -15,13 +18,19 @@ public class Flashcard implements Serializable{
 	@Id
 	private String id;
 	
+	@NotEmpty(message = "Expression must not be empty")
+	@NotBlank(message = "Expression must not be blank")
+	@NotNull(message = "Expression must not be null")
 	private String expression;
 	
-	@NonNull
+	@NotEmpty(message = "Meaning must not be empty")
+	@NotBlank(message = "Meaning must not be blank")
+	@NotNull(message = "Meaning must not be null")
 	private String meaning;
+	
 	private String example;
 	
-	private static final Instant created_at = Instant.now();
+	private final Instant updatedAt = Instant.now();
 	
 	public Flashcard() {
 	}
@@ -83,8 +92,8 @@ public class Flashcard implements Serializable{
 		this.example = example;
 	}
 
-	public static Instant getCreatedAt() {
-		return created_at;
+	public Instant getCreatedAt() {
+		return updatedAt;
 	}
 	
 }
