@@ -4,10 +4,12 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.ericarfs.memocards.entity.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.validation.constraints.NotBlank;
@@ -33,16 +35,22 @@ public class User implements Serializable{
 	@NotNull(message = "Password must not be null")
 	private String password;
 	
+	private String role;
+	
+	@CreatedDate
+	private Instant createdAt;
+	
 	private Instant deletedAt = null;
 	
 	public User() {
 	}
 
-	public User(String id, String username, String password) {
+	public User(String id, String username, String password, Role role) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.password = password;
+		this.role = role.name();
 	}
 
 	public String getId() {
@@ -69,6 +77,23 @@ public class User implements Serializable{
 		this.password = password;
 	}
 	
+	public Role getRole() {
+		return Role.valueOf(role); 
+	}
+
+	public void setRole(Role role) {
+		this.role = role.name();
+	}
+	
+	@JsonIgnore
+	public Instant getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Instant createdAt) {
+		this.createdAt = createdAt;
+	}
+
 	@JsonIgnore
 	public Instant getDeletedAt() {
 		return deletedAt;
@@ -94,4 +119,5 @@ public class User implements Serializable{
 		User other = (User) obj;
 		return Objects.equals(id, other.id);
 	}
+
 }
