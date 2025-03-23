@@ -1,9 +1,9 @@
 package com.ericarfs.memocards.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,21 +19,23 @@ public class UserController {
 	@Autowired
 	private UserService service;
 	
-	@GetMapping()
-	public ResponseEntity<List<User>> findAll(){
-		List<User> list = service.findAll();
-		return ResponseEntity.ok().body(list);
-	}
-	
-	@GetMapping("/{id}")
-	public ResponseEntity<User> findById(@PathVariable String id){
-		User user = service.findById(id);
+	@GetMapping
+	public ResponseEntity<User> findByUsername(){
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String username = userDetails.getUsername();
+		
+		User user = service.findByUsername(username).get();
+
 		return ResponseEntity.ok().body(user);
 	}
 	
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> delete(@PathVariable String id){
-		service.delete(id);
+	@DeleteMapping
+	public ResponseEntity<Void> delete(){
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String username = userDetails.getUsername();
+		
+		User user = service.findByUsername(username).get();
+		service.delete(user.getId());
 		
 		return ResponseEntity.noContent().build();
 	}

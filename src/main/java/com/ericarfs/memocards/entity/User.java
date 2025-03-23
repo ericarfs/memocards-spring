@@ -96,7 +96,6 @@ public class User implements Serializable{
 		return flashcards;
 	}
 	
-	@JsonIgnore
 	public Instant getCreatedAt() {
 		return createdAt;
 	}
@@ -105,7 +104,6 @@ public class User implements Serializable{
 		this.createdAt = createdAt;
 	}
 
-	@JsonIgnore
 	public Instant getDeletedAt() {
 		return deletedAt;
 	}

@@ -12,12 +12,12 @@ import com.ericarfs.memocards.entity.User;
 
 @Repository
 public interface UserRepository extends MongoRepository<User, String>{
-	@Query("{ 'id': ?0 }")
-    @Update("{ '$set' : { 'deletedAt' : new Date() } }")
-    void deleteById(String id);
+	@Query("{ $and: [ {'id': ?0}, {'deletedAt':null} ]}")
+    @Update("{ '$set' : { 'deletedAt' : new Date(), 'username': ?1} }")
+    void deleteById(String id, String newUsername);
 	
-	@Query("{ 'deletedAt': null }")
 	List<User> findAll();
 	
+	@Query("{ $and: [ {'username': ?0}, {'deletedAt':null} ]}")
 	Optional<User> findByUsername(String username);
 }

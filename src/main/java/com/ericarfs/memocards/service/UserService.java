@@ -32,11 +32,12 @@ public class UserService {
 	}
 	
 	public void delete(String id) {
-		if (repository.existsById(id))
-			repository.deleteById(id);
-		else
-			throw new ResourceNotFoundException("User with id " + id + " not found.");
+		User user = findById(id);
+		
+		String username = user.getUsername();
+		String newUsername = username + passwordEncoder.encode(username).substring(0, 15);
 
+		repository.deleteById(id, newUsername);
 	}
 
 	public void register(String username, String password) {
