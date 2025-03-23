@@ -1,7 +1,6 @@
 package com.ericarfs.memocards.controller;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,13 +36,19 @@ public class FlashcardController {
 	
 	@GetMapping
 	public ResponseEntity<List<Flashcard>> listAll(){
-		List<Flashcard> list =  cardService.findAll();
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String username = userDetails.getUsername();
+		
+		List<Flashcard> list =  cardService.findByAuthor(username);
 		return ResponseEntity.ok().body(list);
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Flashcard> listByID(@PathVariable String id){
-		Flashcard card =  cardService.findById(id);
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String username = userDetails.getUsername();
+		
+		Flashcard card =  cardService.findByIdAndAuthor(id, username);
 		return ResponseEntity.ok().body(card);
 	}
 	
@@ -66,13 +71,19 @@ public class FlashcardController {
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Flashcard> update(@PathVariable String id, @Valid @RequestBody Flashcard obj){
-		obj = cardService.update(id, obj);
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String username = userDetails.getUsername();
+		
+		obj = cardService.update(id, username, obj);
 		return ResponseEntity.ok().body(obj);
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> delete(@PathVariable String id){
-		cardService.delete(id);
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String username = userDetails.getUsername();
+		
+		cardService.deleteByUser(id, username);
 		return ResponseEntity.noContent().build();
 	}
 }
