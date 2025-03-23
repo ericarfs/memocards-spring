@@ -5,6 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ericarfs.memocards.dto.AuthorDTO;
+import com.ericarfs.memocards.dto.CreateFlashcardDTO;
+import com.ericarfs.memocards.dto.FlashcardDTO;
 import com.ericarfs.memocards.entity.Flashcard;
 import com.ericarfs.memocards.exceptions.DatabaseException;
 import com.ericarfs.memocards.exceptions.ResourceNotFoundException;
@@ -57,6 +60,10 @@ public class FlashcardService {
 		else
 			throw new ResourceNotFoundException("Flashcard with id " + id + " not found.");
 
+	}
+	
+	public Flashcard mapToFlashcard(CreateFlashcardDTO objDto, AuthorDTO author) {
+		return new Flashcard(null, objDto.expression(), objDto.meaning(), objDto.example(), author);
 	}
 
 }

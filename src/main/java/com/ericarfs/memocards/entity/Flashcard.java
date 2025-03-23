@@ -7,6 +7,8 @@ import java.util.Objects;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.ericarfs.memocards.dto.AuthorDTO;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -30,34 +32,20 @@ public class Flashcard implements Serializable{
 	
 	private String example;
 	
+	private AuthorDTO author;
+	
 	private final Instant updatedAt = Instant.now();
 	
 	public Flashcard() {
 	}
 
-	public Flashcard(String id, String expression, String meaning, String example) {
+	public Flashcard(String id, String expression, String meaning, String example, AuthorDTO author) {
 		super();
 		this.id = id;
 		this.expression = expression;
 		this.meaning = meaning;
 		this.example = example;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Flashcard other = (Flashcard) obj;
-		return Objects.equals(id, other.id);
+		this.author = author;
 	}
 
 	public String getId() {
@@ -94,6 +82,32 @@ public class Flashcard implements Serializable{
 
 	public Instant getCreatedAt() {
 		return updatedAt;
+	}
+
+	public AuthorDTO getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(AuthorDTO author) {
+		this.author = author;
+	}
+	
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Flashcard other = (Flashcard) obj;
+		return Objects.equals(id, other.id);
 	}
 	
 }

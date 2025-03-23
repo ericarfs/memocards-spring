@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.ericarfs.memocards.dto.FlashcardDTO;
 import com.ericarfs.memocards.entity.User;
 import com.ericarfs.memocards.entity.enums.Role;
 import com.ericarfs.memocards.exceptions.ResourceNotFoundException;
@@ -50,5 +51,10 @@ public class UserService {
 	
 	public Optional<User> findByUsername(String username) {
 		return repository.findByUsername(username);
+	}
+	
+	public void addFlashcard(User user, FlashcardDTO obj) {
+		user.getFlashcards().add(obj);
+		repository.save(user);
 	}
 }

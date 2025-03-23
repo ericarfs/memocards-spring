@@ -2,13 +2,17 @@ package com.ericarfs.memocards.entity;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.ericarfs.memocards.dto.FlashcardDTO;
 import com.ericarfs.memocards.entity.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -41,6 +45,9 @@ public class User implements Serializable{
 	private Instant createdAt;
 	
 	private Instant deletedAt = null;
+	
+	@DBRef(lazy = true)
+	private List<FlashcardDTO> flashcards = new ArrayList<>();
 	
 	public User() {
 	}
@@ -83,6 +90,10 @@ public class User implements Serializable{
 
 	public void setRole(Role role) {
 		this.role = role.name();
+	}
+	
+	public List<FlashcardDTO> getFlashcards() {
+		return flashcards;
 	}
 	
 	@JsonIgnore
