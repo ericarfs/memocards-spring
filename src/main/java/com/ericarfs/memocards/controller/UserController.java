@@ -6,10 +6,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ericarfs.memocards.dto.UserDTO;
 import com.ericarfs.memocards.entity.User;
 import com.ericarfs.memocards.service.UserService;
 
@@ -20,13 +20,14 @@ public class UserController {
 	private UserService service;
 	
 	@GetMapping
-	public ResponseEntity<User> findByUsername(){
+	public ResponseEntity<UserDTO> findByUsername(){
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String username = userDetails.getUsername();
 		
 		User user = service.findByUsername(username).get();
-
-		return ResponseEntity.ok().body(user);
+		UserDTO userDto = new UserDTO(user);
+		
+		return ResponseEntity.ok().body(userDto);
 	}
 	
 	@DeleteMapping
