@@ -66,7 +66,7 @@ public class FlashcardController {
 		User user = userService.findByUsername(username).get();
 		AuthorDTO author = new AuthorDTO(user.getId(), username);
 		
-		Flashcard card = cardService.mapToFlashcard(objDto, author);
+		Flashcard card = objDto.mapToFlashcard(author);
 		cardService.insert(card);
 		userService.addFlashcard(user, card);
 		
