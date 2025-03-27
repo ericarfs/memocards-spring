@@ -80,7 +80,7 @@ public class Flashcard implements Serializable{
 		this.example = example;
 	}
 
-	public Instant getCreatedAt() {
+	public Instant getUpdatedAt() {
 		return updatedAt;
 	}
 

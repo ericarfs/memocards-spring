@@ -1,6 +1,7 @@
 package com.ericarfs.memocards.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,21 +36,26 @@ public class FlashcardController {
 	private UserService userService;
 	
 	@GetMapping
-	public ResponseEntity<List<Flashcard>> listAll(){
+	public ResponseEntity<List<FlashcardDTO>> listAll(){
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String username = userDetails.getUsername();
 		
 		List<Flashcard> list =  cardService.findByAuthor(username);
-		return ResponseEntity.ok().body(list);
+		List<FlashcardDTO> cards = list
+									.stream()
+									.map(FlashcardDTO::new)
+									.collect(Collectors.toList());
+									
+		return ResponseEntity.ok().body(cards);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Flashcard> listByID(@PathVariable String id){
+	public ResponseEntity<FlashcardDTO> listByID(@PathVariable String id){
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String username = userDetails.getUsername();
 		
 		Flashcard card =  cardService.findByIdAndAuthor(id, username);
-		return ResponseEntity.ok().body(card);
+		return ResponseEntity.ok().body(new FlashcardDTO(card));
 	}
 	
 	@PostMapping
@@ -62,20 +68,18 @@ public class FlashcardController {
 		
 		Flashcard card = cardService.mapToFlashcard(objDto, author);
 		cardService.insert(card);
-		
-		FlashcardDTO obj = new FlashcardDTO(card);
-		userService.addFlashcard(user, obj);
+		userService.addFlashcard(user, card);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Flashcard> update(@PathVariable String id, @Valid @RequestBody Flashcard obj){
+	public ResponseEntity<FlashcardDTO> update(@PathVariable String id, @Valid @RequestBody Flashcard obj){
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String username = userDetails.getUsername();
 		
 		obj = cardService.update(id, username, obj);
-		return ResponseEntity.ok().body(obj);
+		return ResponseEntity.ok().body(new FlashcardDTO(obj));
 	}
 	
 	@DeleteMapping("/{id}")

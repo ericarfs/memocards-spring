@@ -1,7 +1,5 @@
 package com.ericarfs.memocards.config;
 
-import java.util.Arrays;
-
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -29,9 +27,7 @@ public class AdminUserConfig implements CommandLineRunner {
         var userAdmin = userRepository.findByUsername("admin");
 
         userAdmin.ifPresentOrElse(
-                user -> {
-                    System.out.println("admin ja existe");
-                },
+                user -> {},
                 () -> {
                     var user = new User();
                     user.setUsername("admin");

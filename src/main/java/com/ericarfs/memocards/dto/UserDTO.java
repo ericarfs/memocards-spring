@@ -2,6 +2,7 @@ package com.ericarfs.memocards.dto;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.ericarfs.memocards.entity.User;
 
@@ -18,7 +19,10 @@ public class UserDTO implements Serializable{
 	public UserDTO(User obj) {
 		id = obj.getId();
 		username = obj.getUsername();
-		flashcards = obj.getFlashcards();
+		flashcards = obj.getFlashcards()
+						.stream()
+						.map(FlashcardDTO::new)
+						.collect(Collectors.toList());
 	}
 
 	public String getId() {

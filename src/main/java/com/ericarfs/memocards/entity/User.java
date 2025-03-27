@@ -12,43 +12,40 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.ericarfs.memocards.dto.FlashcardDTO;
 import com.ericarfs.memocards.entity.enums.Role;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-@Document
-(collection="tb_users")
-public class User implements Serializable{
+@Document(collection = "tb_users")
+public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	private String id;
-		
+
 	@NotEmpty(message = "Username must not be empty")
 	@NotBlank(message = "Username must not be blank")
 	@NotNull(message = "Username must not be null")
-	@Indexed(unique=true) 
+	@Indexed(unique = true)
 	private String username;
-	
+
 	@NotEmpty(message = "Password must not be empty")
 	@NotBlank(message = "Password must not be blank")
 	@NotNull(message = "Password must not be null")
 	private String password;
-	
+
 	private String role;
-	
+
 	@CreatedDate
 	private Instant createdAt;
-	
+
 	private Instant deletedAt = null;
-	
+
 	@DBRef(lazy = true)
-	private List<FlashcardDTO> flashcards = new ArrayList<>();
-	
+	private List<Flashcard> flashcards = new ArrayList<>();
+
 	public User() {
 	}
 
@@ -83,19 +80,19 @@ public class User implements Serializable{
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
 	public Role getRole() {
-		return Role.valueOf(role); 
+		return Role.valueOf(role);
 	}
 
 	public void setRole(Role role) {
 		this.role = role.name();
 	}
-	
-	public List<FlashcardDTO> getFlashcards() {
+
+	public List<Flashcard> getFlashcards() {
 		return flashcards;
 	}
-	
+
 	public Instant getCreatedAt() {
 		return createdAt;
 	}
