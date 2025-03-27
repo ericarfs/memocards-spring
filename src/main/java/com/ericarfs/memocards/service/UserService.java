@@ -42,8 +42,12 @@ public class UserService {
 
 	public void register(String username, String password) {
 		String encryptedPassword = passwordEncoder.encode(password);
-		User user = new User(null, username, encryptedPassword, Role.BASIC);
+		User user = createUser(username, encryptedPassword);
 		repository.insert(user);
+	}
+
+	public User createUser(String username, String encryptedPassword){
+		return new User(null, username, encryptedPassword, Role.BASIC);
 	}
 	
 	public Boolean validatePassword(String userPassword, String password) {
