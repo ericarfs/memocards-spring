@@ -41,11 +41,11 @@ public class UserServiceFindTest {
 	}
 	
 	@Test
-	void mustReturnAListWithTwoUsers() {
+	void mustReturnAListWithOneUser() {
 		when(repository.findAll()).thenReturn(users);
 		List<User> users = service.findAll();
 		
-		assertEquals(2, users.size());
+		assertEquals(1, users.size());
 		
 		verify(repository).findAll();
 		verifyNoMoreInteractions(repository);
