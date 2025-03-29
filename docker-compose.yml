@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  mongo_db:
+    image: mongo:latest
+    container_name: mongoDB
+    restart: unless-stopped
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+    ports:
+      - 27017:27017
+    volumes:
+      - db:/data/db
+  app:
+    build: .
+    container_name: memocards
+    depends_on:
+      - mongo_db
+    restart: on-failure
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_APPLICATION_JSON: '{
+        "spring.data.mongodb.uri" : "mongodb://admin:admin@mongo_db:27017/flashcards?authSource=admin"
+        }'
+
+volumes:
+  db:
