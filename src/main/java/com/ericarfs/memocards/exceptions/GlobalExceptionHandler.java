@@ -28,10 +28,32 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(err, status);
 	}
 
+	@ExceptionHandler(DuplicatedResourceException.class)
+	public ResponseEntity<StandardError> handleDuplicatedResourceException(DuplicatedResourceException e,
+			HttpServletRequest request) {
+		String error = "Duplicated resource";
+		HttpStatus status = HttpStatus.CONFLICT;
+		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(),
+				request.getRequestURI());
+
+		return new ResponseEntity<>(err, status);
+	}
+
 	@ExceptionHandler(DatabaseException.class)
 	public ResponseEntity<StandardError> handleDatabaseException(DatabaseException e, HttpServletRequest request) {
 		String error = "Database error";
 		HttpStatus status = HttpStatus.BAD_REQUEST;
+		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(),
+				request.getRequestURI());
+
+		return new ResponseEntity<>(err, status);
+	}
+
+	@ExceptionHandler(ValidationException.class)
+	public ResponseEntity<StandardError> handleValidationException(ValidationException e,
+			HttpServletRequest request) {
+		String error = "Invalid request";
+		HttpStatus status = HttpStatus.CONFLICT;
 		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(),
 				request.getRequestURI());
 
