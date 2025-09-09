@@ -11,13 +11,13 @@ import org.springframework.stereotype.Repository;
 import com.ericarfs.memocards.entity.User;
 
 @Repository
-public interface UserRepository extends MongoRepository<User, String>{
+public interface UserRepository extends MongoRepository<User, String> {
 	@Query("{ $and: [ {'id': ?0}, {'deletedAt':null} ]}")
-    @Update("{ '$set' : { 'deletedAt' : new Date(), 'username': ?1} }")
-    void deleteById(String id, String newUsername);
-	
+	@Update("{ '$set' : { 'deletedAt' : new Date(), 'username': ?1} }")
+	void deleteById(String id, String newUsername);
+
 	List<User> findAll();
-	
-	@Query("{ $and: [ {'username': ?0}, {'deletedAt':null} ]}")
+
+	@Query("{ $and: [{ 'username': { $regex: '^?0$', $options: 'i' } }, { 'deletedAt': null }] }")
 	Optional<User> findByUsername(String username);
 }

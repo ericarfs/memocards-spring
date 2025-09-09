@@ -9,14 +9,19 @@ import org.springframework.stereotype.Repository;
 import com.ericarfs.memocards.entity.Flashcard;
 
 @Repository
-public interface FlashcardRepository extends MongoRepository<Flashcard, String>{
-	@Query("{$and: [ {'expression' : ?0 }, {'meaning': ?1 }, {'example': ?2 }, {'author.username': ?3} ]}")
+public interface FlashcardRepository extends MongoRepository<Flashcard, String> {
+	@Query("{ $and: [ " +
+			"{ 'expression': { $regex: '^?0$', $options: 'i' } }, " +
+			"{ 'meaning': { $regex: '^?1$', $options: 'i' } }, " +
+			"{ 'example': { $regex: '^?2$', $options: 'i' } }, " +
+			"{ 'author.username': { $regex: '^?3$', $options: 'i' } } " +
+			"] }")
 	Flashcard findByAll(String expression, String meaning, String example, String authorUsername);
-	
+
+	@Query("{ 'expression': { $regex: '^?0$', $options: 'i' } }")
 	Flashcard findByExpression(String expression);
-	
-	@Query("{ 'author.username': ?0 }")
+
+	@Query("{ 'author.username': { $regex: '^?0$', $options: 'i' } }")
 	List<Flashcard> findByAuthor(String username);
-	
-	
+
 }
