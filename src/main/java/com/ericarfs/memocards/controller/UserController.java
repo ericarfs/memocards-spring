@@ -14,30 +14,30 @@ import com.ericarfs.memocards.entity.User;
 import com.ericarfs.memocards.service.UserService;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserController {
 	@Autowired
 	private UserService service;
-	
+
 	@GetMapping
-	public ResponseEntity<UserDTO> findByUsername(){
+	public ResponseEntity<UserDTO> findByUsername() {
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String username = userDetails.getUsername();
-		
+
 		User user = service.findByUsername(username).get();
 		UserDTO userDto = new UserDTO(user);
-		
+
 		return ResponseEntity.ok().body(userDto);
 	}
-	
+
 	@DeleteMapping
-	public ResponseEntity<Void> delete(){
+	public ResponseEntity<Void> delete() {
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String username = userDetails.getUsername();
-		
+
 		User user = service.findByUsername(username).get();
 		service.delete(user.getId());
-		
+
 		return ResponseEntity.noContent().build();
 	}
 }
