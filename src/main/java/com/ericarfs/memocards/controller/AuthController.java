@@ -32,11 +32,32 @@ public class AuthController {
 		Optional<User> user = service.findByUsername(request.get("username"));
 
 		if (user.isPresent() && service.validatePassword(user.get().getPassword(), request.get("password"))) {
-			String token = JwtUtil.generateToken(user.get().getUsername(), user.get().getRole().name());
-			return ResponseEntity.ok().body(Map.of("token", token));
+			String accessToken = JwtUtil.generateAccessToken(user.get().getUsername(), user.get().getRole().name());
+			String refreshToken = JwtUtil.generateRefreshToken(user.get());
+			return ResponseEntity.ok().body(Map.of(
+					"access", accessToken,
+					"refresh", refreshToken));
 		}
 
 		return ResponseEntity.status(401).body("Wrong credentials.");
+	}
+
+	@PostMapping("/token/refresh")
+	public ResponseEntity<?> refresh(@RequestBody Map<String, String> request) {
+		String refreshToken = request.get("refreshToken");
+
+		try {
+			String username = JwtUtil.extractClaims(refreshToken).getSubject();
+
+			String newAccessToken = JwtUtil.generateAccessToken(username,
+					service.findByUsername(username).get().getRole().name());
+
+			return ResponseEntity.ok().body(Map.of(
+					"access", newAccessToken,
+					"refresh", refreshToken));
+		} catch (Exception e) {
+			return ResponseEntity.status(401).body("Invalid refresh token.");
+		}
 	}
 
 }
