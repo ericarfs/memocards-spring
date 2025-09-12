@@ -15,6 +15,8 @@ import com.ericarfs.memocards.entity.User;
 import com.ericarfs.memocards.security.JwtUtil;
 import com.ericarfs.memocards.service.UserService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -22,7 +24,7 @@ public class AuthController {
 	private UserService service;
 
 	@PostMapping("/register")
-	public ResponseEntity<Void> register(@RequestBody User obj) {
+	public ResponseEntity<Void> register(@Valid @RequestBody User obj) {
 		service.register(obj.getUsername(), obj.getPassword());
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}

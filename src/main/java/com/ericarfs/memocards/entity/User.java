@@ -17,6 +17,7 @@ import com.ericarfs.memocards.entity.enums.Role;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Document(collection = "tb_users")
 public class User implements Serializable {
@@ -29,6 +30,8 @@ public class User implements Serializable {
 	@NotBlank(message = "Username must not be blank")
 	@NotNull(message = "Username must not be null")
 	@Indexed(unique = true)
+	@Size(min = 4, message = "Username must have at least 4 characters.")
+	@Size(max = 20, message = "Username must have up to 20 characters.")
 	private String username;
 
 	@NotEmpty(message = "Password must not be empty")

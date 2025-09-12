@@ -12,30 +12,34 @@ import com.ericarfs.memocards.dto.AuthorDTO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
-@Document(collection="tb_flashcards")
-public class Flashcard implements Serializable{
+@Document(collection = "tb_flashcards")
+public class Flashcard implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	private String id;
-	
+
 	@NotEmpty(message = "Expression must not be empty")
 	@NotBlank(message = "Expression must not be blank")
 	@NotNull(message = "Expression must not be null")
+	@Size(max = 200, message = "Expression should be up to 200 characters!")
 	private String expression;
-	
+
 	@NotEmpty(message = "Meaning must not be empty")
 	@NotBlank(message = "Meaning must not be blank")
 	@NotNull(message = "Meaning must not be null")
+	@Size(max = 200, message = "Expression meaning should be up to 200 characters!")
 	private String meaning;
-	
+
+	@Size(max = 200, message = "Expression example should be up to 200 characters!")
 	private String example;
-	
+
 	private AuthorDTO author;
-	
+
 	private final Instant updatedAt = Instant.now();
-	
+
 	public Flashcard() {
 	}
 
@@ -91,7 +95,6 @@ public class Flashcard implements Serializable{
 	public void setAuthor(AuthorDTO author) {
 		this.author = author;
 	}
-	
 
 	@Override
 	public int hashCode() {
@@ -109,5 +112,5 @@ public class Flashcard implements Serializable{
 		Flashcard other = (Flashcard) obj;
 		return Objects.equals(id, other.id);
 	}
-	
+
 }
