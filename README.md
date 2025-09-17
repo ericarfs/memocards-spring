@@ -54,10 +54,19 @@ Run the project
   mvn spring-boot:run
 ```
 
-(Alternative) Running with Docker
+(Alternative) Running with Docker Compose
 
 ```bash
   docker compose up
+```
+
+(Alternative) Running a Docker image
+
+```bash
+  docker pull ericarfs/memocards-spring
+```
+```bash
+  docker run ericarfs/memocards-spring
 ```
 
 ## API Reference
@@ -78,13 +87,23 @@ Run the project
 #### Login
 
 ```http
-  POST /auth/login
+  POST /api/auth/token
 ```
 
 | Body       | Type     | Description   |
 | :--------- | :------- | :------------ |
 | `username` | `string` | **Required**. |
 | `password` | `string` | **Required**. |
+
+#### Refresh token
+
+```http
+  POST /api/auth/token/refresh
+```
+
+| Body       | Type     | Description   |
+| :--------- | :------- | :------------ |
+| `refreshToken` | `string` | **Required**. |
 
 ### Authenticated as ADMIN User
 
@@ -145,25 +164,25 @@ Run the project
 #### Get authenticated user
 
 ```http
-  GET /users
+  GET /api/users
 ```
 
 #### Delete authenticated user
 
 ```http
-  DELETE /users
+  DELETE /api/users
 ```
 
 #### Get all flashcards from authenticated user
 
 ```http
-  GET /flashcards
+  GET /api/flashcards
 ```
 
 #### Get a flashcard from authenticated user
 
 ```http
-  GET /flashcards/${id}
+  GET /api/flashcards/${id}
 ```
 
 | Parameter | Type     | Description                            |
@@ -173,7 +192,7 @@ Run the project
 #### Insert a new flashcard for authenticated user
 
 ```http
-  POST /flashcards
+  POST /api/flashcards
 ```
 
 | Body         | Type     | Description                                                  |
@@ -185,7 +204,7 @@ Run the project
 #### Update a flashcard from authenticated user
 
 ```http
-  PUT /flashcards/${id}
+  PUT /api/flashcards/${id}
 ```
 
 | Parameter | Type     | Description                            |
@@ -201,7 +220,7 @@ Run the project
 #### Delete a flashcard from authenticated user
 
 ```http
-  DELETE /flashcard/${id}
+  DELETE /api/flashcard/${id}
 ```
 
 | Parameter | Type     | Description                             |
